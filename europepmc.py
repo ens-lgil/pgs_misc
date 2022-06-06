@@ -26,19 +26,21 @@ def get_publication_information(pmid):
         if result:
             firstauthor = result['authorString'].split(',')[0]
             authors = result['authorString']
-            title = result['title']
+            title = result['title'].strip()
             date_publication = result['firstPublicationDate']
+            doi = result['doi']
             print(f"\n# firstauthor:\n{firstauthor}")
             print(f"\n# authors:\n{authors}")
             print(f"\n# title:\n{title}")
             print(f"\n# date_publication:\n{date_publication}")
+            print(f"\n# DOI:\n{doi}")
             if result['pubType'] == 'preprint':
                 journal = result['bookOrReportDetails']['publisher']
             else:
                 journal = result['journalTitle']
             print(f"\n# journal:\n{journal}")
 
-            print(f"\n# SQL update:\nUPDATE catalog_publication SET \"PMID\"={pmid}, firstauthor='{firstauthor}', authors='{authors}', title='{title}', date_publication='{date_publication}', journal='{journal}' WHERE id='';\n")
+            print(f"\n# SQL update:\nUPDATE catalog_publication SET \"PMID\"={pmid}, firstauthor='{firstauthor}', authors='{authors}', title='{title}', date_publication='{date_publication}', journal='{journal}', doi='{doi}' WHERE id='';\n")
 
         else:
             print(f'Can\'t find a result on EuropePMC for the publication: {pmid}')

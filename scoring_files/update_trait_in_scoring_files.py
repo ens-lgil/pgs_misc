@@ -2,7 +2,6 @@ import os, re
 import gzip
 import argparse
 import requests
-import pandas as pd
 
 file_extension = ".txt.gz"
 rest_url = 'http://127.0.0.1:8000/rest/score/'

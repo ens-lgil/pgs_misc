@@ -46,7 +46,7 @@ def get_publication_information(pgp_id,curation_url):
         scores = []
         firstauthor = ''
 
-        result = rest_api_call_publication(pgp_id)
+        result = rest_api_call_publication(pgp_id,curation_url)
         if result:
             scores = result['associated_pgs_ids']['development']
             firstauthor = result['firstauthor']
@@ -61,7 +61,7 @@ def get_publication_information(pgp_id,curation_url):
 
         if scores:
             for score in scores:
-                score_result = rest_api_call_score(score)
+                score_result = rest_api_call_score(score,curation_url)
                 if score_result:
                     sql_score = f"INSERT INTO catalog_embargoedscore (id,firstauthor,name,trait_reported) VALUES ('{score}','{firstauthor}','{score_result['name']}','{score_result['trait_reported']}');"
                     print(f"> SQL SCORE:\n{sql_score}")
