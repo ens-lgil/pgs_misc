@@ -56,14 +56,17 @@ class EFO_Check:
         for trait_id in self.efo_list.keys():
             obo_id = trait_id.replace('_',':')
             ols_url = f'{self.ols_rest_url}{obo_id}'
-            response = self.rest_api_call(ols_url)
-            response = response.json()['_embedded']['terms']
-            if len(response) == 1:
-                response = response[0]
+            try:
+                response = self.rest_api_call(ols_url)
+                response = response.json()['_embedded']['terms']
+                if len(response) == 1:
+                    response = response[0]
 
-                if response['is_obsolete']:
-                    self.efo_issue['obsolete'].append(trait_id)
-            elif len(response) == 0:
+                    if response['is_obsolete']:
+                        self.efo_issue['obsolete'].append(trait_id)
+                elif len(response) == 0:
+                    self.efo_issue['missing'].append(trait_id)
+            except:
                 self.efo_issue['missing'].append(trait_id)
 
 
@@ -72,7 +75,7 @@ class EFO_Check:
 class PGS_Email():
 
     sender = 'auto@pgscatalog.org'
-    title_prefix = 'Trait checks - '
+    title_prefix = 'PGS Trait checks - '
 
     def __init__(self, title, content, recipient):
         self.msg = EmailMessage()
